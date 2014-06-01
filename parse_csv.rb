@@ -1,20 +1,24 @@
 require 'csv'
 class Parsecsv
 	def parse_file(file_path)
-		rooms_sorted = Hash.new
-		statistics_info = []
-		time_spent_in_room = 0
-	  rooms_sorted = get_rooms_sorted(file_path)	
-		# iterate over every room
-		rooms_sorted.each do |room, persons_visited|
-		  visitors_of_a_room = []
-		  visitors_of_a_room = visitors_of_a_room(persons_visited)
-		  time_spent_in_room = get_time_spent(visitors_of_a_room, persons_visited)
-		  statistics_info <<  ("Room: "+ room.to_s +
-		       ", No.of visitors: "+ visitors_of_a_room.count.to_s + 
-		       ", Average time: " + ((time_spent_in_room+1)/visitors_of_a_room.count).to_s )
+		if File.exists?(file_path)
+			rooms_sorted = Hash.new
+			statistics_info = []
+			time_spent_in_room = 0
+		  rooms_sorted = get_rooms_sorted(file_path)	
+			# iterate over every room
+			rooms_sorted.each do |room, persons_visited|
+			  visitors_of_a_room = []
+			  visitors_of_a_room = visitors_of_a_room(persons_visited)
+			  time_spent_in_room = get_time_spent(visitors_of_a_room, persons_visited)
+			  statistics_info <<  ("Room: "+ room.to_s +
+			       ", No.of visitors: "+ visitors_of_a_room.count.to_s + 
+			       ", Average time: " + ((time_spent_in_room+1)/visitors_of_a_room.count).to_s )
+			end
+			puts statistics_info
+		else
+			puts "File does not exist with name " + file_path 
 		end
-		puts statistics_info
 		end
 
    def get_time_spent(visitors_of_a_room, persons_visited)
@@ -60,8 +64,4 @@ class Parsecsv
 	end
 end
 
-
-puts "Enter file name along with path"
-file_path = gets.chomp
-Parsecsv.new.parse_file(file_path)
-  
+Parsecsv.new.parse_file('visitors.csv')
